@@ -196,12 +196,12 @@
         infosBlackView = [[UIView alloc] init];
         [infosBlackView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.75]];
         
-        spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [infosBlackView addSubview:spinner];
         
         infosLB = [[UILabel alloc] init];
         [infosLB setBackgroundColor:[UIColor clearColor]];
-        [infosLB setTextColor:[UIColor grayColor]];
+        [infosLB setTextColor:[UIColor whiteColor]];
         [infosLB setTextAlignment:NSTextAlignmentCenter];
         [infosBlackView addSubview:infosLB];
         
@@ -212,8 +212,8 @@
     [superView addSubview:infosBlackView];
     [infosBlackView setFrame:superView.bounds];
     
-    [spinner setCenter:CGPointMake(infosBlackView.frame.size.width / 2, infosBlackView.frame.size.height /6)];
-    [infosLB setFrame:CGRectMake(0, infosBlackView.frame.size.height / 3, infosBlackView.frame.size.width, infosBlackView.frame.size.height / 3 * 2)];
+    [spinner setCenter:CGPointMake(infosBlackView.frame.size.width / 2, infosBlackView.frame.size.height / 2)];
+    [infosLB setFrame:CGRectMake(0, spinner.frame.origin.y + spinner.frame.size.height + 10, infosBlackView.frame.size.width, 60)];
     
     [infosBlackView.superview bringSubviewToFront:infosBlackView];
     [infosLB setText:infos];
