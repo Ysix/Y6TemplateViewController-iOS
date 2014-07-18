@@ -59,12 +59,12 @@
     
 	//body part
 	bodyView = [[UIScrollView alloc] init];
-	[self.view addSubview:bodyView];
+	[mainView addSubview:bodyView];
 	
     
 	//header Part
 	headerView = [[UIView alloc] init];
-	[self.view addSubview:headerView];
+	[mainView addSubview:headerView];
     
     if (heightHeaderInit != -1)
     {
@@ -86,7 +86,7 @@
     
 	//footer part
 	footerView = [[UIView alloc] init];
-	[self.view addSubview:footerView];
+	[mainView addSubview:footerView];
 }
 
 - (void)setHeaderBackground:(UIImage *)image
@@ -139,7 +139,7 @@
 
 - (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration
 {
-    CGRect mainFrame = self.view.frame;
+    CGRect mainFrame = mainView.frame;
     
     UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
     
