@@ -15,9 +15,10 @@
 {
     int heightHeaderInit;
     int heightFooterInit;
-    BOOL addStatusBarHeightOniOS7;
+//    BOOL addStatusBarHeightOniOS7;
 
     //Header Part
+	UIView		*statusBarView;
     UIView      *headerView;
     UIImageView *headerBkgIV;
     UIImageView *headerLogoIV;
@@ -53,12 +54,15 @@
 }
 
 @property (nonatomic, retain) UIView *headerView;
-@property (nonatomic, retain) UIView *bodyView;
+@property (nonatomic, retain) UILabel *pageTitleLB;
+@property (nonatomic, retain) UIScrollView *bodyView;
 @property (nonatomic, retain) UIView *footerView;
 
 - (id)initWithHeaderWithBackground:(UIImage *)image AndFooterHeight:(int)footerHeight;
 - (id)initWithHeaderHeight:(int)headerHeight andFooterHeight:(int)footerHeight;
 
+- (void)setStatusBarBackground:(UIImage *)image;
+- (void)setStatusBarBackgroundColor:(UIColor *)color;
 - (void)setHeaderBackground:(UIImage *)image;
 - (void)setHeaderLogo:(UIImage *)image;
 - (void)setPageTitle:(NSString *)title;
