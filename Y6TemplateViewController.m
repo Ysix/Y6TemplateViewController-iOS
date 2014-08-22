@@ -52,17 +52,7 @@
 
 	//body part
 	bodyView = [[UIScrollView alloc] init];
-<<<<<<< HEAD
 	[mainView addSubview:bodyView];
-	
-    
-	//header Part
-	headerView = [[UIView alloc] init];
-	[mainView addSubview:headerView];
-    
-=======
-	[self.view addSubview:bodyView];
-
 
 	//header Part
 	headerView = [[UIView alloc] init];
@@ -71,7 +61,7 @@
 		[headerView addSubview:headerBkgIV];
 		[headerView sendSubviewToBack:headerBkgIV];
 	}
-	[self.view addSubview:headerView];
+	[mainView addSubview:headerView];
 
 	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![self prefersStatusBarHidden]) // if iOS >= 7 and statusBar visible
 	{
@@ -79,7 +69,6 @@
 		[self.view addSubview:statusBarView];
 	}
 
->>>>>>> master
     if (heightHeaderInit != -1)
     {
         if (heightHeaderInit == -2 && headerBkgIV)
@@ -168,13 +157,8 @@
 
 - (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration
 {
-<<<<<<< HEAD
     CGRect mainFrame = mainView.frame;
-    
-=======
-    CGRect mainFrame = self.view.frame;
 
->>>>>>> master
     UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
 
     if (!((UIInterfaceOrientationIsPortrait(orientation) && UIInterfaceOrientationIsPortrait(currentOrientation)) ||
