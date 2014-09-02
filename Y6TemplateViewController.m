@@ -157,6 +157,14 @@
 
 - (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration
 {
+
+	if (duration > 0)
+	{
+		[self animateDrawViewIn:orientation withDuration:duration];
+
+		return;
+	}
+
     CGRect mainFrame = mainView.frame;
 
     UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -206,15 +214,23 @@
 
     if (heightFooterInit != -1 || heightHeaderInit != -1)
     {
-		NSLog(@"%f, %f",  mainFrame.size.height, (CGRectGetMaxY(headerView.frame) + footerView.frame.origin.y));
-
-
         bodyView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), mainFrame.size.width, footerView.frame.origin.y - CGRectGetMaxY(headerView.frame));
     }
     else
     {
         [bodyView setFrame:CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, mainFrame.size.height)];
     }
+}
+
+- (void)animateDrawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration
+{
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:duration];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+
+	[self drawViewIn:orientation withDuration:0];
+
+	[UIView commitAnimations];
 }
 
 - (void)displayInfo:(NSString *)infos onView:(UIView *)superView
