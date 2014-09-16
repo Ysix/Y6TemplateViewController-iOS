@@ -297,6 +297,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)menuInTransitionAtOpeningPercent:(float)percent
+{
+	[super menuInTransitionAtOpeningPercent:percent];
+
+	if (textFieldFirstResponder)
+	{
+		[self textFieldFirstResponderResign];
+	}
+}
+
 #pragma mark - TextFieldDelegate functions
 
 
