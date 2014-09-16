@@ -52,7 +52,7 @@
 
 	//body part
 	bodyView = [[UIScrollView alloc] init];
-	[self.view addSubview:bodyView];
+	[mainView addSubview:bodyView];
 
 
 	//header Part
@@ -62,7 +62,7 @@
 		[headerView addSubview:headerBkgIV];
 		[headerView sendSubviewToBack:headerBkgIV];
 	}
-	[self.view addSubview:headerView];
+	[mainView addSubview:headerView];
 
 	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![[UIApplication sharedApplication] isStatusBarHidden]) // if iOS >= 7 and statusBar visible
 	{
@@ -90,7 +90,7 @@
 
 	//footer part
 	footerView = [[UIView alloc] init];
-	[self.view addSubview:footerView];
+	[mainView addSubview:footerView];
 }
 
 - (void)setStatusBarBackground:(UIImage *)image
@@ -164,7 +164,7 @@
 		return;
 	}
 
-    CGRect mainFrame = self.view.frame;
+    CGRect mainFrame = mainView.frame;
 
     UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
 
@@ -294,6 +294,16 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)sideMenuClicked
+{
+	[super sideMenuClicked];
+
+	if (textFieldFirstResponder)
+	{
+		[self textFieldFirstResponderResign];
+	}
 }
 
 #pragma mark - TextFieldDelegate functions
