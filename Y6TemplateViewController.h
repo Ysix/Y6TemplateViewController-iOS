@@ -15,7 +15,6 @@
 {
     int heightHeaderInit;
     int heightFooterInit;
-//    BOOL addStatusBarHeightOniOS7;
 
     //Header Part
 	UIView		*statusBarView;

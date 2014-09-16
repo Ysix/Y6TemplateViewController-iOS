@@ -64,7 +64,7 @@
 	}
 	[self.view addSubview:headerView];
 
-	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![self prefersStatusBarHidden]) // if iOS >= 7 and statusBar visible
+	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![[UIApplication sharedApplication] isStatusBarHidden]) // if iOS >= 7 and statusBar visible
 	{
 		statusBarView = [[UIView alloc] init];
 		[self.view addSubview:statusBarView];
@@ -214,7 +214,7 @@
     }
     else
     {
-        [bodyView setFrame:CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, mainFrame.size.height)];
+        [bodyView setFrame:CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, mainFrame.size.height - (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0))];
     }
 }
 
