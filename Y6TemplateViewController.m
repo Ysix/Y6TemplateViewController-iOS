@@ -542,7 +542,7 @@
             if (isDatePicker)
             {
                 NSDateFormatter *getDateFormatter = [[NSDateFormatter alloc ] init];
-                [getDateFormatter setDateFormat:@"dd/MM/yyyy"];
+                [getDateFormatter setDateFormat:@"yyyy-MM-dd"];
 
                 [self performSelector:sendResultSelector withObject:[getDateFormatter stringFromDate:[datePicker date]]];
             }
