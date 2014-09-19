@@ -142,6 +142,26 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardWillShow:)
+												 name:UIKeyboardWillShowNotification
+											   object:nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardDidShow:)
+												 name:UIKeyboardDidShowNotification
+											   object:nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardWillHide:)
+												 name:UIKeyboardWillHideNotification
+											   object:nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardDidHide:)
+												 name:UIKeyboardDidHideNotification
+											   object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -306,8 +326,30 @@
 	}
 }
 
-#pragma mark - TextFieldDelegate functions
+#pragma mark - keyboard methods
 
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+	keyboardHeight = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+}
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+	keyboardHeight = 0;
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification
+{
+
+
+}
+
+
+#pragma mark - TextFieldDelegate functions
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -325,9 +367,9 @@
         viewHeight = ([[UIApplication sharedApplication] isStatusBarHidden] ? 320 : 300);
     } // /!\ ce if est la pour resoudre un "bug" qui fait que self.view.frame.size.height n'est pas a la bonne taille pour les modals VC en mode landscape
 
-    if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD_IPHONE)
+    if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD)
     {
-        decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD_IPHONE);
+        decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD);
 
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.25];

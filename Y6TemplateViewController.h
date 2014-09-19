@@ -8,7 +8,11 @@
 
 #define STATUS_BAR_HEIGHT 20
 
-#define SIZE_OF_KEYBOARD_IPHONE (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 162 : 216)
+
+#define SIZE_OF_KEYBOARD (keyboardHeight) //  != -1 ? keyboardHeight : (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 162 : 216))
+
+#define SIZE_OF_KEYBOARD_IPHONE SIZE_OF_KEYBOARD
+
 
 
 @interface Y6TemplateViewController : Y6SideMenuViewController <UIPickerViewDataSource, UIPickerViewDelegate>
@@ -36,7 +40,10 @@
     UILabel                 *infosLB;
     UIActivityIndicatorView *spinner;
     NSDate                  *popUpShowedDate;
-    
+
+	// keayboard management
+	CGFloat keyboardHeight;
+
     // textfield management
     int     decalageBody;
     UIResponder *textFieldFirstResponder;
@@ -75,6 +82,13 @@
 
 - (void)goBack;
 - (void)goBackAnimated:(BOOL)animated;
+
+// keyboard management
+
+- (void)keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardDidShow:(NSNotification *)notification;
+- (void)keyboardWillHide:(NSNotification *)notification;
+- (void)keyboardDidHide:(NSNotification *)notification;
 
 // textfield management
 - (void)textFieldFirstResponderResign;
