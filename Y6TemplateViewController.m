@@ -28,8 +28,8 @@
 {
 	if (self = [self initWithHeaderHeight:-2 andFooterHeight:footerHeight])
 	{
-        [self setHeaderBackground:image];
-    }
+		[self setHeaderBackground:image];
+	}
 	return self;
 }
 
@@ -39,7 +39,7 @@
 	{
 		heightHeaderInit = headerHeight;
 		heightFooterInit = footerHeight;
-    }
+	}
 	return self;
 }
 
@@ -70,23 +70,23 @@
 		[self.view addSubview:statusBarView];
 	}
 
-    if (heightHeaderInit != -1)
-    {
-        if (heightHeaderInit == -2 && headerBkgIV)
-        {
-            heightHeaderInit = headerBkgIV.image.size.height;
-        }
+	if (heightHeaderInit != -1)
+	{
+		if (heightHeaderInit == -2 && headerBkgIV)
+		{
+			heightHeaderInit = headerBkgIV.image.size.height;
+		}
 
-        pageTitleLB = [[UILabel alloc] init];
-        [pageTitleLB setTextAlignment:NSTextAlignmentCenter];
-        [pageTitleLB setHidden:YES];
-        [headerView addSubview:pageTitleLB];
+		pageTitleLB = [[UILabel alloc] init];
+		[pageTitleLB setTextAlignment:NSTextAlignmentCenter];
+		[pageTitleLB setHidden:YES];
+		[headerView addSubview:pageTitleLB];
 
-        backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [backButton addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-        [backButton setHidden:(self.navigationController.viewControllers.count == 1)];
-        [headerView addSubview:backButton];
-    }
+		backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+		[backButton addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+		[backButton setHidden:(self.navigationController.viewControllers.count == 1)];
+		[headerView addSubview:backButton];
+	}
 
 	//footer part
 	footerView = [[UIView alloc] init];
@@ -107,7 +107,7 @@
 
 - (void)setHeaderBackground:(UIImage *)image
 {
-    headerBkgIV = [[UIImageView alloc] initWithImage:image];
+	headerBkgIV = [[UIImageView alloc] initWithImage:image];
 	if (headerView)
 	{
 		[headerView addSubview:headerBkgIV];
@@ -117,43 +117,64 @@
 
 - (void)setHeaderLogo:(UIImage *)image
 {
-    headerLogoIV = [[UIImageView alloc] initWithImage:image];
-    [headerView addSubview:headerLogoIV];
+	headerLogoIV = [[UIImageView alloc] initWithImage:image];
+	[headerView addSubview:headerLogoIV];
 
-    [headerView sendSubviewToBack:headerLogoIV];
-    [headerView sendSubviewToBack:headerBkgIV];
+	[headerView sendSubviewToBack:headerLogoIV];
+	[headerView sendSubviewToBack:headerBkgIV];
 }
 
 - (void)setPageTitle:(NSString *)title
 {
-    if (headerLogoIV)
-        [headerLogoIV setHidden:YES];
+	if (headerLogoIV)
+		[headerLogoIV setHidden:YES];
 
-    [pageTitleLB setHidden:NO];
-    [pageTitleLB setText:title];
+	[pageTitleLB setHidden:NO];
+	[pageTitleLB setText:title];
 }
 
 - (void)setBackButtonImage:(NSString *)imageName
 {
-    [backButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+	[backButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	// Do any additional setup after loading the view.
+
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardWillShow:)
+												 name:UIKeyboardWillShowNotification
+											   object:nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardDidShow:)
+												 name:UIKeyboardDidShowNotification
+											   object:nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardWillHide:)
+												 name:UIKeyboardWillHideNotification
+											   object:nil];
+
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(keyboardDidHide:)
+												 name:UIKeyboardDidHideNotification
+											   object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+	[super viewWillAppear:animated];
 
-    [self drawViewIn:[[UIApplication sharedApplication] statusBarOrientation] withDuration:0];
+	[self drawViewIn:[[UIApplication sharedApplication] statusBarOrientation] withDuration:0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+	[super viewDidAppear:animated];
 }
 
 - (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration
@@ -164,61 +185,61 @@
 		return;
 	}
 
-    CGRect mainFrame = self.view.frame;
+	CGRect mainFrame = self.view.frame;
 
-    UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+	UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
 
-    if (!((UIInterfaceOrientationIsPortrait(orientation) && UIInterfaceOrientationIsPortrait(currentOrientation)) ||
-          (UIInterfaceOrientationIsLandscape(orientation) && UIInterfaceOrientationIsLandscape(currentOrientation))))
-    {
-        if ([[UIApplication sharedApplication] isStatusBarHidden])
-            mainFrame = CGRectMake(mainFrame.origin.x, mainFrame.origin.y, mainFrame.size.height + STATUS_BAR_HEIGHT, mainFrame.size.width - STATUS_BAR_HEIGHT);
-        else
-            mainFrame = CGRectMake(mainFrame.origin.x, mainFrame.origin.y, mainFrame.size.height, mainFrame.size.width);
-    }
+	if (!((UIInterfaceOrientationIsPortrait(orientation) && UIInterfaceOrientationIsPortrait(currentOrientation)) ||
+		  (UIInterfaceOrientationIsLandscape(orientation) && UIInterfaceOrientationIsLandscape(currentOrientation))))
+	{
+		if ([[UIApplication sharedApplication] isStatusBarHidden])
+			mainFrame = CGRectMake(mainFrame.origin.x, mainFrame.origin.y, mainFrame.size.height + STATUS_BAR_HEIGHT, mainFrame.size.width - STATUS_BAR_HEIGHT);
+		else
+			mainFrame = CGRectMake(mainFrame.origin.x, mainFrame.origin.y, mainFrame.size.height, mainFrame.size.width);
+	}
 
 	if (statusBarView)
 	{
 		[statusBarView setFrame:CGRectMake(0, 0, self.view.frame.size.width, STATUS_BAR_HEIGHT)];
 	}
 
-    if (heightHeaderInit != -1)
-    {
-        headerView.frame = CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, heightHeaderInit);
+	if (heightHeaderInit != -1)
+	{
+		headerView.frame = CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, heightHeaderInit);
 
-        if (headerBkgIV)
+		if (headerBkgIV)
 		{
 			[headerBkgIV setFrame:headerView.bounds];
-        }
+		}
 
-        if (headerLogoIV)
-        {
-            [headerLogoIV setFrame:CGRectMake(0, 0, headerLogoIV.image.size.width, headerLogoIV.image.size.height)];
-            [headerLogoIV setCenter:CGPointMake(headerView.frame.size.width / 2, headerView.frame.size.height / 2)];
-        }
+		if (headerLogoIV)
+		{
+			[headerLogoIV setFrame:CGRectMake(0, 0, headerLogoIV.image.size.width, headerLogoIV.image.size.height)];
+			[headerLogoIV setCenter:CGPointMake(headerView.frame.size.width / 2, headerView.frame.size.height / 2)];
+		}
 
-        [pageTitleLB setFrame:CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.height)];
+		[pageTitleLB setFrame:CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.height)];
 
-        if (backButton.currentImage)
-        {
-            [backButton setFrame:CGRectMake(0, 0, backButton.currentImage.size.width, backButton.currentImage.size.height)];
-            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
-        }
-    }
+		if (backButton.currentImage)
+		{
+			[backButton setFrame:CGRectMake(0, 0, backButton.currentImage.size.width, backButton.currentImage.size.height)];
+			[backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+		}
+	}
 
-    if (heightFooterInit != -1)
-    {
+	if (heightFooterInit != -1)
+	{
 		footerView.frame = CGRectMake(0, mainFrame.size.height - heightFooterInit, mainFrame.size.width, heightFooterInit);
-    }
+	}
 
-    if (heightFooterInit != -1 || heightHeaderInit != -1)
-    {
-        bodyView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), mainFrame.size.width, footerView.frame.origin.y - CGRectGetMaxY(headerView.frame));
-    }
-    else
-    {
-        [bodyView setFrame:CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, mainFrame.size.height - (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0))];
-    }
+	if (heightFooterInit != -1 || heightHeaderInit != -1)
+	{
+		bodyView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), mainFrame.size.width, footerView.frame.origin.y - CGRectGetMaxY(headerView.frame));
+	}
+	else
+	{
+		[bodyView setFrame:CGRectMake(0, (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0), mainFrame.size.width, mainFrame.size.height - (statusBarView ? CGRectGetMaxY(statusBarView.frame) : 0))];
+	}
 }
 
 - (void)animateDrawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration
@@ -234,66 +255,88 @@
 
 - (void)displayInfo:(NSString *)infos onView:(UIView *)superView
 {
-    if (infosBlackView == nil)
-    {
-        infosBlackView = [[UIView alloc] init];
-        [infosBlackView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.75]];
+	if (infosBlackView == nil)
+	{
+		infosBlackView = [[UIView alloc] init];
+		[infosBlackView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.75]];
 
-        spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [infosBlackView addSubview:spinner];
+		spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+		[infosBlackView addSubview:spinner];
 
-        infosLB = [[UILabel alloc] init];
-        [infosLB setBackgroundColor:[UIColor clearColor]];
-        [infosLB setTextColor:[UIColor whiteColor]];
-        [infosLB setTextAlignment:NSTextAlignmentCenter];
-        [infosBlackView addSubview:infosLB];
+		infosLB = [[UILabel alloc] init];
+		[infosLB setBackgroundColor:[UIColor clearColor]];
+		[infosLB setTextColor:[UIColor whiteColor]];
+		[infosLB setTextAlignment:NSTextAlignmentCenter];
+		[infosBlackView addSubview:infosLB];
 
-    }
-    else
-        [infosBlackView removeFromSuperview];
+	}
+	else
+		[infosBlackView removeFromSuperview];
 
-    [superView addSubview:infosBlackView];
-    [infosBlackView setFrame:superView.bounds];
+	[superView addSubview:infosBlackView];
+	[infosBlackView setFrame:superView.bounds];
 
-    [spinner setCenter:CGPointMake(infosBlackView.frame.size.width / 2, infosBlackView.frame.size.height / 2)];
-    [infosLB setFrame:CGRectMake(0, spinner.frame.origin.y + spinner.frame.size.height + 10, infosBlackView.frame.size.width, 60)];
+	[spinner setCenter:CGPointMake(infosBlackView.frame.size.width / 2, infosBlackView.frame.size.height / 2)];
+	[infosLB setFrame:CGRectMake(0, spinner.frame.origin.y + spinner.frame.size.height + 10, infosBlackView.frame.size.width, 60)];
 
-    [infosBlackView.superview bringSubviewToFront:infosBlackView];
-    [infosLB setText:infos];
+	[infosBlackView.superview bringSubviewToFront:infosBlackView];
+	[infosLB setText:infos];
 
-    [infosBlackView setHidden:NO];
-    [spinner startAnimating];
-    popUpShowedDate = [NSDate date];
+	[infosBlackView setHidden:NO];
+	[spinner startAnimating];
+	popUpShowedDate = [NSDate date];
 }
 
 - (void)hideInfo
 {
-    [infosBlackView removeFromSuperview];
-    [spinner stopAnimating];
+	[infosBlackView removeFromSuperview];
+	[spinner stopAnimating];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [self drawViewIn:toInterfaceOrientation withDuration:duration];
+	[self drawViewIn:toInterfaceOrientation withDuration:duration];
 }
 
 - (void)goBack
 {
-    [self goBackAnimated:YES];
+	[self goBackAnimated:YES];
 }
 
 - (void)goBackAnimated:(BOOL)animated
 {
-    if (self.navigationController && [self.navigationController.viewControllers count] > 1)
-    {
-        [self.navigationController popViewControllerAnimated:animated];
-    }
+	if (self.navigationController && [self.navigationController.viewControllers count] > 1)
+	{
+		[self.navigationController popViewControllerAnimated:animated];
+	}
 }
 
 - (void)didReceiveMemoryWarning
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
+}
+
+#pragma mark - keyboard methods
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+	keyboardHeight = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+}
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+	keyboardHeight = 0;
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification
+{
+
+
 }
 
 #pragma mark - TextFieldDelegate functions
@@ -301,272 +344,272 @@
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    [self hidePicker:nil];
-    textFieldFirstResponder = textField;
-    [bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
-    decalageBody = 0;
+	[self hidePicker:nil];
+	textFieldFirstResponder = textField;
+	[bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
+	decalageBody = 0;
 
-    CGRect frameOnMainView = [textField convertRect:textField.bounds toView:self.view];
-    CGFloat viewHeight;
-    viewHeight = self.view.frame.size.height;
+	CGRect frameOnMainView = [textField convertRect:textField.bounds toView:self.view];
+	CGFloat viewHeight;
+	viewHeight = self.view.frame.size.height;
 
-    if (![self.navigationController.viewControllers containsObject:self] && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
-    {
-        viewHeight = ([[UIApplication sharedApplication] isStatusBarHidden] ? 320 : 300);
-    } // /!\ ce if est la pour resoudre un "bug" qui fait que self.view.frame.size.height n'est pas a la bonne taille pour les modals VC en mode landscape
+	if (![self.navigationController.viewControllers containsObject:self] && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
+	{
+		viewHeight = ([[UIApplication sharedApplication] isStatusBarHidden] ? 320 : 300);
+	} // /!\ ce if est la pour resoudre un "bug" qui fait que self.view.frame.size.height n'est pas a la bonne taille pour les modals VC en mode landscape
 
-    if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD_IPHONE)
-    {
-        decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD_IPHONE);
+	if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD)
+	{
+		decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD);
 
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.25];
+		[UIView beginAnimations:nil context:nil];
+		[UIView setAnimationDuration:0.25];
 
-        [bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y - decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
+		[bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y - decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
 
-        [UIView commitAnimations];
+		[UIView commitAnimations];
 
-    }
-    return YES;
+	}
+	return YES;
 }
 
 - (void)textFieldFirstResponderResign
 {
-    [textFieldFirstResponder resignFirstResponder];
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.25];
+	[textFieldFirstResponder resignFirstResponder];
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:0.25];
 
-    [bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
+	[bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
 
-    [UIView commitAnimations];
+	[UIView commitAnimations];
 
-    decalageBody = 0;
-    textFieldFirstResponder = nil;
+	decalageBody = 0;
+	textFieldFirstResponder = nil;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self textFieldFirstResponderResign];
-    return NO;
+	[self textFieldFirstResponderResign];
+	return NO;
 }
 
 #pragma mark - UIPickerViewDelegate functions
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if ([titlesForPicker count] >0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
-        return [[titlesForPicker objectAtIndex:component] objectAtIndex:row];
-    return [titlesForPicker objectAtIndex:row];
+	if ([titlesForPicker count] >0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
+		return [[titlesForPicker objectAtIndex:component] objectAtIndex:row];
+	return [titlesForPicker objectAtIndex:row];
 }
 
 #pragma mark UIPickerViewDataSource functions
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    if ([titlesForPicker count] >0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
-        return [titlesForPicker count];
-    return 1;
+	if ([titlesForPicker count] >0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
+		return [titlesForPicker count];
+	return 1;
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if ([titlesForPicker count] > 0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
-        return [[titlesForPicker objectAtIndex:component] count];
-    return [titlesForPicker count];
+	if ([titlesForPicker count] > 0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
+		return [[titlesForPicker objectAtIndex:component] count];
+	return [titlesForPicker count];
 }
 
 #pragma mark UIPicker others functions
 
 - (void)initPicker
 {
-    if (textFieldFirstResponder)
-    {
-        [textFieldFirstResponder resignFirstResponder];
-        [bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
-        decalageBody = 0;
-        textFieldFirstResponder = nil;
-    }
+	if (textFieldFirstResponder)
+	{
+		[textFieldFirstResponder resignFirstResponder];
+		[bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
+		decalageBody = 0;
+		textFieldFirstResponder = nil;
+	}
 
-    if (viewForPicker == nil)
-    {
-        viewForPicker = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 250)];
-        if ([[UIDevice currentDevice].systemVersion floatValue] < 7)
-        {
-            [viewForPicker setBackgroundColor:[UIColor colorWithRed:0.157 green:0.165 blue:0.224 alpha:1]];
-        }
-        else
-        {
-            [viewForPicker setBackgroundColor:[UIColor whiteColor]];
+	if (viewForPicker == nil)
+	{
+		viewForPicker = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 250)];
+		if ([[UIDevice currentDevice].systemVersion floatValue] < 7)
+		{
+			[viewForPicker setBackgroundColor:[UIColor colorWithRed:0.157 green:0.165 blue:0.224 alpha:1]];
+		}
+		else
+		{
+			[viewForPicker setBackgroundColor:[UIColor whiteColor]];
 
-        }
-        [self.view addSubview:viewForPicker];
-    }
+		}
+		[self.view addSubview:viewForPicker];
+	}
 
-    for (UIView *v in [viewForPicker subviews])
-        [v removeFromSuperview];
+	for (UIView *v in [viewForPicker subviews])
+		[v removeFromSuperview];
 
-    UIButton *btnCloseTimePicker;
-    UIButton *btnValidTime;
+	UIButton *btnCloseTimePicker;
+	UIButton *btnValidTime;
 
-    btnCloseTimePicker = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btnCloseTimePicker setFrame:CGRectMake(65, 220, 70, 26)];
-    [btnCloseTimePicker setTitle:@"Fermer" forState:UIControlStateNormal];
-    [btnCloseTimePicker setTag:2];
-    [btnCloseTimePicker addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
+	btnCloseTimePicker = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[btnCloseTimePicker setFrame:CGRectMake(65, 220, 70, 26)];
+	[btnCloseTimePicker setTitle:@"Fermer" forState:UIControlStateNormal];
+	[btnCloseTimePicker setTag:2];
+	[btnCloseTimePicker addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
 
-    btnValidTime = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [btnValidTime setFrame:CGRectMake(185, 220, 70, 26)];
-    [btnValidTime setTitle:@"Valider" forState:UIControlStateNormal];
-    [btnValidTime setTag:1];
-    [btnValidTime addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
+	btnValidTime = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	[btnValidTime setFrame:CGRectMake(185, 220, 70, 26)];
+	[btnValidTime setTitle:@"Valider" forState:UIControlStateNormal];
+	[btnValidTime setTag:1];
+	[btnValidTime addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
 
-    [viewForPicker addSubview:btnCloseTimePicker];
-    [viewForPicker addSubview:btnValidTime];
+	[viewForPicker addSubview:btnCloseTimePicker];
+	[viewForPicker addSubview:btnValidTime];
 
-    if (isHourPicker)
-    {
-        if (datePicker == nil)
-        {
-            datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 250)];
-        }
-        [viewForPicker addSubview:datePicker];
-        [datePicker setDatePickerMode:UIDatePickerModeTime];
-    }
-    else if (isDatePicker)
-    {
-        if (datePicker == nil)
-        {
-            datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 250)];
-        }
-        [viewForPicker addSubview:datePicker];
-        [datePicker setDatePickerMode:UIDatePickerModeDate];
-    }
-    else
-    {
-        if (pickerToDisplay == nil)
-        {
-            pickerToDisplay = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 250)];
-            [pickerToDisplay setShowsSelectionIndicator:YES];
-            [pickerToDisplay setDelegate:self];
-            [pickerToDisplay setDataSource:self];
-        }
-        [viewForPicker addSubview:pickerToDisplay];
-        [pickerToDisplay selectRow:0 inComponent:0 animated:NO];
-    }
-    [self.view bringSubviewToFront:viewForPicker];
+	if (isHourPicker)
+	{
+		if (datePicker == nil)
+		{
+			datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 250)];
+		}
+		[viewForPicker addSubview:datePicker];
+		[datePicker setDatePickerMode:UIDatePickerModeTime];
+	}
+	else if (isDatePicker)
+	{
+		if (datePicker == nil)
+		{
+			datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 250)];
+		}
+		[viewForPicker addSubview:datePicker];
+		[datePicker setDatePickerMode:UIDatePickerModeDate];
+	}
+	else
+	{
+		if (pickerToDisplay == nil)
+		{
+			pickerToDisplay = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 250)];
+			[pickerToDisplay setShowsSelectionIndicator:YES];
+			[pickerToDisplay setDelegate:self];
+			[pickerToDisplay setDataSource:self];
+		}
+		[viewForPicker addSubview:pickerToDisplay];
+		[pickerToDisplay selectRow:0 inComponent:0 animated:NO];
+	}
+	[self.view bringSubviewToFront:viewForPicker];
 }
 
 - (void)reloadAndDisplayPicker
 {
-    [pickerToDisplay reloadAllComponents];
+	[pickerToDisplay reloadAllComponents];
 
-    CGRect rectPicker = [viewForPicker frame];
-    if (isHourPicker)
-    {
-        rectPicker.origin.y = self.view.frame.size.height - viewForPicker.frame.size.height;//160;
-    }
-    else {
-        rectPicker.origin.y = self.view.frame.size.height - viewForPicker.frame.size.height;//210;
-    }
+	CGRect rectPicker = [viewForPicker frame];
+	if (isHourPicker)
+	{
+		rectPicker.origin.y = self.view.frame.size.height - viewForPicker.frame.size.height;//160;
+	}
+	else {
+		rectPicker.origin.y = self.view.frame.size.height - viewForPicker.frame.size.height;//210;
+	}
 
 
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5];
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:0.5];
 
-    [viewForPicker setFrame:rectPicker];
+	[viewForPicker setFrame:rectPicker];
 
-    [UIView commitAnimations];
+	[UIView commitAnimations];
 }
 
 - (void)displayHourPickerandReturnChoiceTo:(SEL)selector
 {
-    isHourPicker = YES;
-    isDatePicker = NO;
-    [self initPicker];
-    sendResultSelector = selector;
-    [self reloadAndDisplayPicker];
+	isHourPicker = YES;
+	isDatePicker = NO;
+	[self initPicker];
+	sendResultSelector = selector;
+	[self reloadAndDisplayPicker];
 }
 
 - (void)displayHourPickerandReturnChoiceTo:(SEL)selector withWillHideSelector:(SEL)willHideSelector
 {
-    willHidePickerSelector = willHideSelector;
-    [self displayHourPickerandReturnChoiceTo:selector];
+	willHidePickerSelector = willHideSelector;
+	[self displayHourPickerandReturnChoiceTo:selector];
 }
 
 - (void)displayDatePickerandReturnChoiceTo:(SEL)selector
 {
-    isHourPicker = NO;
-    isDatePicker = YES;
-    [self initPicker];
-    sendResultSelector = selector;
-    [self reloadAndDisplayPicker];
+	isHourPicker = NO;
+	isDatePicker = YES;
+	[self initPicker];
+	sendResultSelector = selector;
+	[self reloadAndDisplayPicker];
 
 }
 
 - (void)displayAPickerWith:(NSArray *)choices andReturnChoiceTo:(SEL)selector
 {
-    isHourPicker = NO;
-    isDatePicker = NO;
+	isHourPicker = NO;
+	isDatePicker = NO;
 
-    [self initPicker];
+	[self initPicker];
 
-    if (titlesForPicker == nil)
-    {
-        titlesForPicker = [[NSMutableArray alloc] init];
-    }
-    [titlesForPicker removeAllObjects];
-    [titlesForPicker addObjectsFromArray:choices];
-    sendResultSelector = selector;
+	if (titlesForPicker == nil)
+	{
+		titlesForPicker = [[NSMutableArray alloc] init];
+	}
+	[titlesForPicker removeAllObjects];
+	[titlesForPicker addObjectsFromArray:choices];
+	sendResultSelector = selector;
 
-    [self reloadAndDisplayPicker];
+	[self reloadAndDisplayPicker];
 }
 
 - (void)hidePicker:(id)sender
 {
-    if (willHidePickerSelector && [self respondsToSelector:willHidePickerSelector])
-    {
-        [self performSelector:willHidePickerSelector withObject:nil];
-    }
+	if (willHidePickerSelector && [self respondsToSelector:willHidePickerSelector])
+	{
+		[self performSelector:willHidePickerSelector withObject:nil];
+	}
 
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5];
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationDuration:0.5];
 
-    [viewForPicker setFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, viewForPicker.frame.size.height)];
+	[viewForPicker setFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, viewForPicker.frame.size.height)];
 
-    [UIView commitAnimations];
+	[UIView commitAnimations];
 
-    if (sender && [(UIButton *)sender tag])// on enregistre les changement
+	if (sender && [(UIButton *)sender tag])// on enregistre les changement
 	{
 		if ([(UIButton *)sender tag] == 1)
 		{
-            if (isDatePicker)
-            {
-                NSDateFormatter *getDateFormatter = [[NSDateFormatter alloc ] init];
-                [getDateFormatter setDateFormat:@"yyyy-MM-dd"];
+			if (isDatePicker)
+			{
+				NSDateFormatter *getDateFormatter = [[NSDateFormatter alloc ] init];
+				[getDateFormatter setDateFormat:@"yyyy-MM-dd"];
 
-                [self performSelector:sendResultSelector withObject:[getDateFormatter stringFromDate:[datePicker date]]];
-            }
-            else if (isHourPicker)
-            {
-                NSDateFormatter *getHourFormatter = [[NSDateFormatter alloc ] init];
-                [getHourFormatter setDateFormat:@"HH:mm"];
+				[self performSelector:sendResultSelector withObject:[getDateFormatter stringFromDate:[datePicker date]]];
+			}
+			else if (isHourPicker)
+			{
+				NSDateFormatter *getHourFormatter = [[NSDateFormatter alloc ] init];
+				[getHourFormatter setDateFormat:@"HH:mm"];
 
-                [self performSelector:sendResultSelector withObject:[getHourFormatter stringFromDate:[datePicker date]]];
-            }
-            else
-            {
-                if ([titlesForPicker count] >0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
-                {
-                    NSMutableArray *resultArray = [[NSMutableArray alloc] init];
-                    for (int i = 0; i < [titlesForPicker count]; i++)
-                    {
-                        [resultArray addObject:[[titlesForPicker objectAtIndex:i] objectAtIndex:[pickerToDisplay selectedRowInComponent:i]]];
-                    }
-                    [self performSelector:sendResultSelector withObject:resultArray];
-                }
-                else
-                    [self performSelector:sendResultSelector withObject:[titlesForPicker objectAtIndex:[pickerToDisplay selectedRowInComponent:0]]];
-            }
+				[self performSelector:sendResultSelector withObject:[getHourFormatter stringFromDate:[datePicker date]]];
+			}
+			else
+			{
+				if ([titlesForPicker count] >0 && [[titlesForPicker objectAtIndex:0] isKindOfClass:[NSArray class]])
+				{
+					NSMutableArray *resultArray = [[NSMutableArray alloc] init];
+					for (int i = 0; i < [titlesForPicker count]; i++)
+					{
+						[resultArray addObject:[[titlesForPicker objectAtIndex:i] objectAtIndex:[pickerToDisplay selectedRowInComponent:i]]];
+					}
+					[self performSelector:sendResultSelector withObject:resultArray];
+				}
+				else
+					[self performSelector:sendResultSelector withObject:[titlesForPicker objectAtIndex:[pickerToDisplay selectedRowInComponent:0]]];
+			}
 		}
 	}
 }
