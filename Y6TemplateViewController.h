@@ -77,6 +77,8 @@
 
 - (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration;
 
+- (void)hideFooterAnimated:(BOOL)animated;
+
 - (void)displayInfo:(NSString *)infos onView:(UIView *)superView;
 - (void)hideInfo;
 

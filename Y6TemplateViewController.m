@@ -47,7 +47,7 @@
 
 	[super loadView];
 
-	if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets)])
+	if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)])
 		[self setAutomaticallyAdjustsScrollViewInsets:NO];
 
 	//body part
@@ -250,6 +250,12 @@
 	[self drawViewIn:orientation withDuration:0];
 
 	[UIView commitAnimations];
+}
+
+- (void)hideFooterAnimated:(BOOL)animated
+{
+	heightFooterInit = 0;
+	[self drawViewIn:[[UIApplication sharedApplication] statusBarOrientation] withDuration:(animated ? 0.25 : 0)];
 }
 
 - (void)displayInfo:(NSString *)infos onView:(UIView *)superView
