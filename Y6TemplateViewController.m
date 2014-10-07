@@ -58,8 +58,7 @@
 	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![[UIApplication sharedApplication] isStatusBarHidden]) // if iOS >= 7 and statusBar visible
 	{
 		statusBarView = [[UIView alloc] init];
-		[self.view addSubview:statusBarView];
-		[self.view sendSubviewToBack:statusBarView];
+		[self.view insertSubview:statusBarView belowSubview:mainView];
 	}
 
 	//header Part
