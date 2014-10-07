@@ -59,6 +59,7 @@
 	{
 		statusBarView = [[UIView alloc] init];
 		[self.view addSubview:statusBarView];
+		[self.view sendSubviewToBack:statusBarView];
 	}
 
 	//header Part
