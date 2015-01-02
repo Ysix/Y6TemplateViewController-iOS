@@ -12,7 +12,7 @@
 
 @implementation Y6TemplateViewController
 
-@synthesize headerView, bodyView, footerView;
+@synthesize headerView, bodyView, footerView, pageTitleLB;
 
 - (id)init
 {
@@ -224,6 +224,13 @@
         {
             [backButton setFrame:CGRectMake(0, 0, backButton.currentImage.size.width, backButton.currentImage.size.height)];
             [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+        }
+        else if (backButton.currentTitle.length)
+        {
+            [backButton sizeToFit];
+            [backButton setFrame:CGRectMake(0, 0, MAX(40, backButton.frame.size.width), MAX(40, backButton.frame.size.height))];
+            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+            NSLog(@"%@ %d", NSStringFromCGRect(backButton.frame));
         }
     }
 
