@@ -12,7 +12,7 @@
 
 @implementation Y6TemplateViewController
 
-@synthesize headerView, bodyView, footerView;
+@synthesize headerView, bodyView, footerView, pageTitleLB;
 
 - (id)init
 {
@@ -47,13 +47,19 @@
 
 	[super loadView];
 
-	if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets)])
+	if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)])
 		[self setAutomaticallyAdjustsScrollViewInsets:NO];
 
 	//body part
 	bodyView = [[UIScrollView alloc] init];
-	[self.view addSubview:bodyView];
+	[mainView addSubview:bodyView];
 
+
+	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![[UIApplication sharedApplication] isStatusBarHidden]) // if iOS >= 7 and statusBar visible
+	{
+		statusBarView = [[UIView alloc] init];
+		[self.view insertSubview:statusBarView belowSubview:mainView];
+	}
 
 	//header Part
 	headerView = [[UIView alloc] init];
@@ -62,13 +68,8 @@
 		[headerView addSubview:headerBkgIV];
 		[headerView sendSubviewToBack:headerBkgIV];
 	}
-	[self.view addSubview:headerView];
+	[mainView addSubview:headerView];
 
-	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![[UIApplication sharedApplication] isStatusBarHidden]) // if iOS >= 7 and statusBar visible
-	{
-		statusBarView = [[UIView alloc] init];
-		[self.view addSubview:statusBarView];
-	}
 
 	if (heightHeaderInit != -1)
 	{
@@ -90,7 +91,7 @@
 
 	//footer part
 	footerView = [[UIView alloc] init];
-	[self.view addSubview:footerView];
+	[mainView addSubview:footerView];
 }
 
 - (void)setStatusBarBackground:(UIImage *)image
@@ -143,7 +144,6 @@
 	[super viewDidLoad];
 	// Do any additional setup after loading the view.
 
-
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(keyboardWillShow:)
 												 name:UIKeyboardWillShowNotification
@@ -185,8 +185,17 @@
 		return;
 	}
 
-	CGRect mainFrame = self.view.frame;
+    CGRect mainFrame;
 
+    if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
+    {
+        mainFrame = mainView.frame;
+    }
+    else
+    {
+        mainFrame = self.view.frame;
+    }
+    
 	UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
 
 	if (!((UIInterfaceOrientationIsPortrait(orientation) && UIInterfaceOrientationIsPortrait(currentOrientation)) ||
@@ -220,13 +229,19 @@
 
 		[pageTitleLB setFrame:CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.height)];
 
-		if (backButton.currentImage)
-		{
-			[backButton setFrame:CGRectMake(0, 0, backButton.currentImage.size.width, backButton.currentImage.size.height)];
-			[backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
-		}
-	}
-
+        if (backButton.currentImage)
+        {
+            [backButton setFrame:CGRectMake(0, 0, backButton.currentImage.size.width, backButton.currentImage.size.height)];
+            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+        }
+        else if (backButton.currentTitle.length)
+        {
+            [backButton sizeToFit];
+            [backButton setFrame:CGRectMake(0, 0, MAX(40, backButton.frame.size.width), MAX(40, backButton.frame.size.height))];
+            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+        }
+    }
+    
 	if (heightFooterInit != -1)
 	{
 		footerView.frame = CGRectMake(0, mainFrame.size.height - heightFooterInit, mainFrame.size.width, heightFooterInit);
@@ -251,6 +266,12 @@
 	[self drawViewIn:orientation withDuration:0];
 
 	[UIView commitAnimations];
+}
+
+- (void)hideFooterAnimated:(BOOL)animated
+{
+	heightFooterInit = 0;
+	[self drawViewIn:[[UIApplication sharedApplication] statusBarOrientation] withDuration:(animated ? 0.25 : 0)];
 }
 
 - (void)displayInfo:(NSString *)infos onView:(UIView *)superView
@@ -339,8 +360,17 @@
 
 }
 
-#pragma mark - TextFieldDelegate functions
+- (void)sideMenuClicked
+{
+	[super sideMenuClicked];
 
+	if (textFieldFirstResponder)
+	{
+		[self textFieldFirstResponderResign];
+	}
+}
+
+#pragma mark - TextFieldDelegate functions
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -358,10 +388,11 @@
 		viewHeight = ([[UIApplication sharedApplication] isStatusBarHidden] ? 320 : 300);
 	} // /!\ ce if est la pour resoudre un "bug" qui fait que self.view.frame.size.height n'est pas a la bonne taille pour les modals VC en mode landscape
 
-	if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD)
-	{
-		decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD);
 
+    if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD)
+    {
+        decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD);
+        
 		[UIView beginAnimations:nil context:nil];
 		[UIView setAnimationDuration:0.25];
 
