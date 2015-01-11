@@ -50,15 +50,25 @@
 	if ([self respondsToSelector:@selector(setAutomaticallyAdjustsScrollViewInsets:)])
 		[self setAutomaticallyAdjustsScrollViewInsets:NO];
 
+    if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
+    {
+        referenceView = (UIView *)[self performSelector:@selector(maineView)];
+    }
+    else
+    {
+        referenceView = self.view;
+    }
+    
 	//body part
 	bodyView = [[UIScrollView alloc] init];
-	[mainView addSubview:bodyView];
+	[referenceView addSubview:bodyView];
 
 
 	if ([self respondsToSelector:@selector(prefersStatusBarHidden)] && ![[UIApplication sharedApplication] isStatusBarHidden]) // if iOS >= 7 and statusBar visible
 	{
 		statusBarView = [[UIView alloc] init];
-		[self.view insertSubview:statusBarView belowSubview:mainView];
+        if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
+            [self.view insertSubview:statusBarView belowSubview:referenceView];
 	}
 
 	//header Part
@@ -68,7 +78,7 @@
 		[headerView addSubview:headerBkgIV];
 		[headerView sendSubviewToBack:headerBkgIV];
 	}
-	[mainView addSubview:headerView];
+	[referenceView addSubview:headerView];
 
 
 	if (heightHeaderInit != -1)
@@ -91,7 +101,7 @@
 
 	//footer part
 	footerView = [[UIView alloc] init];
-	[mainView addSubview:footerView];
+	[referenceView addSubview:footerView];
 }
 
 - (void)setStatusBarBackground:(UIImage *)image
@@ -185,17 +195,8 @@
 		return;
 	}
 
-    CGRect mainFrame;
-
-    if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
-    {
-        mainFrame = mainView.frame;
-    }
-    else
-    {
-        mainFrame = self.view.frame;
-    }
-    
+    CGRect mainFrame = referenceView.frame;
+        
 	UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
 
 	if (!((UIInterfaceOrientationIsPortrait(orientation) && UIInterfaceOrientationIsPortrait(currentOrientation)) ||
@@ -362,7 +363,8 @@
 
 - (void)sideMenuClicked
 {
-	[super sideMenuClicked];
+    if ([super respondsToSelector:@selector(sideMenuClicked)])
+	[super performSelector:@selector(sideMenuClicked)];
 
 	if (textFieldFirstResponder)
 	{
