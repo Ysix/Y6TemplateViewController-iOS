@@ -6,13 +6,13 @@
 
 #import <UIKit/UIKit.h>
 
-#define STATUS_BAR_HEIGHT 20
+#define STATUS_BAR_HEIGHT 0
 
 #define SIZE_OF_KEYBOARD_IPHONE SIZE_OF_KEYBOARD
 
 #define SIZE_OF_KEYBOARD (keyboardHeight) //  != -1 ? keyboardHeight : (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 162 : 216))
 
-@interface Y6TemplateViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface Y6TemplateViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
 {
     UIView *referenceView;
     
@@ -90,6 +90,7 @@
 - (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
 - (void)keyboardDidHide:(NSNotification *)notification;
+- (void)handleKeyboardMoves;
 
 // textfield management
 - (void)textFieldFirstResponderResign;

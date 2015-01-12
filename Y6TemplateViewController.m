@@ -344,21 +344,60 @@
 - (void)keyboardWillShow:(NSNotification *)notification
 {
 	keyboardHeight = [[notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    
+    [self handleKeyboardMoves];
 }
 
 - (void)keyboardDidShow:(NSNotification *)notification
 {
+    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
 	keyboardHeight = 0;
+    
+    [self handleKeyboardMoves];
 }
 
 - (void)keyboardDidHide:(NSNotification *)notification
 {
 
 
+}
+
+- (void)handleKeyboardMoves
+{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        
+    [bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
+        
+    } completion:nil];
+
+    decalageBody = 0;
+    
+    CGRect frameOnMainView = [(UITextField *)textFieldFirstResponder convertRect:[(UITextField *)textFieldFirstResponder bounds] toView:self.view];
+    CGFloat viewHeight;
+    viewHeight = self.view.frame.size.height;
+    
+    if (![self.navigationController.viewControllers containsObject:self] && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
+    {
+        viewHeight = ([[UIApplication sharedApplication] isStatusBarHidden] ? 320 : 300);
+    } // /!\ ce if est la pour resoudre un "bug" qui fait que self.view.frame.size.height n'est pas a la bonne taille pour les modals VC en mode landscape
+    
+    
+    if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD)
+    {
+        decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD);
+        
+        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            
+            [bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y - decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
+            
+        } completion:nil];
+        
+        
+    }
 }
 
 - (void)sideMenuClicked
@@ -378,31 +417,9 @@
 {
 	[self hidePicker:nil];
 	textFieldFirstResponder = textField;
-	[bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y + decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
-	decalageBody = 0;
-
-	CGRect frameOnMainView = [textField convertRect:textField.bounds toView:self.view];
-	CGFloat viewHeight;
-	viewHeight = self.view.frame.size.height;
-
-	if (![self.navigationController.viewControllers containsObject:self] && UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
-	{
-		viewHeight = ([[UIApplication sharedApplication] isStatusBarHidden] ? 320 : 300);
-	} // /!\ ce if est la pour resoudre un "bug" qui fait que self.view.frame.size.height n'est pas a la bonne taille pour les modals VC en mode landscape
-
-
-    if (frameOnMainView.origin.y + frameOnMainView.size.height + 8 > viewHeight - SIZE_OF_KEYBOARD)
-    {
-        decalageBody = frameOnMainView.origin.y + frameOnMainView.size.height + 8 - (viewHeight - SIZE_OF_KEYBOARD);
-        
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:0.25];
-
-		[bodyView setFrame:CGRectMake(bodyView.frame.origin.x, bodyView.frame.origin.y - decalageBody, bodyView.frame.size.width, bodyView.frame.size.height)];
-
-		[UIView commitAnimations];
-
-	}
+    
+    [self handleKeyboardMoves];
+    
 	return YES;
 }
 
