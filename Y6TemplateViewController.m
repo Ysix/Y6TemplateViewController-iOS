@@ -52,7 +52,7 @@
 
     if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
     {
-        referenceView = (UIView *)[self performSelector:@selector(maineView)];
+        referenceView = (UIView *)[self performSelector:@selector(mainView)];
     }
     else
     {
