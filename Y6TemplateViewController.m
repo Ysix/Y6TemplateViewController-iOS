@@ -52,7 +52,7 @@
 
     if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
     {
-        referenceView = (UIView *)[self performSelector:@selector(maineView)];
+        referenceView = (UIView *)[self performSelector:@selector(mainView)];
     }
     else
     {
@@ -402,8 +402,8 @@
 
 - (void)sideMenuClicked
 {
-    if ([super respondsToSelector:@selector(sideMenuClicked)])
-	[super performSelector:@selector(sideMenuClicked)];
+	if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
+		[super sideMenuClicked];
 
 	if (textFieldFirstResponder)
 	{
