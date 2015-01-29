@@ -4,15 +4,15 @@
 //  Created by Ysix on 14/01/13.
 //
 
-#import <UIKit/UIKit.h>
+#import "Y6SideMenuViewController.h"
 
-#define STATUS_BAR_HEIGHT 0
+#define STATUS_BAR_HEIGHT 20
 
 #define SIZE_OF_KEYBOARD_IPHONE SIZE_OF_KEYBOARD
 
 #define SIZE_OF_KEYBOARD (keyboardHeight) //  != -1 ? keyboardHeight : (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 162 : 216))
 
-@interface Y6TemplateViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
+@interface Y6TemplateViewController : Y6SideMenuViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
 {
     UIView *referenceView;
     
