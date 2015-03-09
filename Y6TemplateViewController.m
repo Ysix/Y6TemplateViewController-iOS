@@ -228,19 +228,21 @@
 			[headerLogoIV setCenter:CGPointMake(headerView.frame.size.width / 2, headerView.frame.size.height / 2)];
 		}
 
-		[pageTitleLB setFrame:CGRectMake(0, 0, headerView.frame.size.width, headerView.frame.size.height)];
 
         if (backButton.currentImage)
         {
             [backButton setFrame:CGRectMake(0, 0, backButton.currentImage.size.width, backButton.currentImage.size.height)];
-            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, headerView.frame.size.height / 2)];
         }
         else if (backButton.currentTitle.length)
         {
             [backButton sizeToFit];
             [backButton setFrame:CGRectMake(0, 0, MAX(40, backButton.frame.size.width), MAX(40, backButton.frame.size.height))];
-            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, pageTitleLB.center.y)];
+            [backButton setCenter:CGPointMake(10 + backButton.frame.size.width / 2, headerView.frame.size.height / 2)];
         }
+
+		[pageTitleLB setFrame:CGRectMake(CGRectGetMaxX(backButton.frame) + 10, 0, headerView.frame.size.width - ((CGRectGetMaxX(backButton.frame) + 10) * 2), headerView.frame.size.height)];
+
     }
     
 	if (heightFooterInit != -1)
