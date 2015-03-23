@@ -104,51 +104,6 @@
 	[referenceView addSubview:footerView];
 }
 
-- (void)setStatusBarBackground:(UIImage *)image
-{
-	if (statusBarView)
-		[statusBarView setBackgroundColor:[UIColor colorWithPatternImage:image]];
-}
-
-- (void)setStatusBarBackgroundColor:(UIColor *)color
-{
-	if (statusBarView)
-		[statusBarView setBackgroundColor:color];
-}
-
-- (void)setHeaderBackground:(UIImage *)image
-{
-	headerBkgIV = [[UIImageView alloc] initWithImage:image];
-	if (headerView)
-	{
-		[headerView addSubview:headerBkgIV];
-		[headerView sendSubviewToBack:headerBkgIV];
-	}
-}
-
-- (void)setHeaderLogo:(UIImage *)image
-{
-	headerLogoIV = [[UIImageView alloc] initWithImage:image];
-	[headerView addSubview:headerLogoIV];
-
-	[headerView sendSubviewToBack:headerLogoIV];
-	[headerView sendSubviewToBack:headerBkgIV];
-}
-
-- (void)setPageTitle:(NSString *)title
-{
-	if (headerLogoIV)
-		[headerLogoIV setHidden:YES];
-
-	[pageTitleLB setHidden:NO];
-	[pageTitleLB setText:title];
-}
-
-- (void)setBackButtonImage:(NSString *)imageName
-{
-	[backButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-}
-
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
@@ -271,6 +226,66 @@
 	[UIView commitAnimations];
 }
 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+	[self drawViewIn:toInterfaceOrientation withDuration:duration];
+}
+
+- (void)didReceiveMemoryWarning
+{
+	[super didReceiveMemoryWarning];
+	// Dispose of any resources that can be recreated.
+}
+
+#pragma mark - customising / setting views
+
+- (void)setStatusBarBackground:(UIImage *)image
+{
+	if (statusBarView)
+		[statusBarView setBackgroundColor:[UIColor colorWithPatternImage:image]];
+}
+
+- (void)setStatusBarBackgroundColor:(UIColor *)color
+{
+	if (statusBarView)
+		[statusBarView setBackgroundColor:color];
+}
+
+- (void)setHeaderBackground:(UIImage *)image
+{
+	headerBkgIV = [[UIImageView alloc] initWithImage:image];
+	if (headerView)
+	{
+		[headerView addSubview:headerBkgIV];
+		[headerView sendSubviewToBack:headerBkgIV];
+	}
+}
+
+- (void)setHeaderLogo:(UIImage *)image
+{
+	headerLogoIV = [[UIImageView alloc] initWithImage:image];
+	[headerView addSubview:headerLogoIV];
+
+	[headerView sendSubviewToBack:headerLogoIV];
+	[headerView sendSubviewToBack:headerBkgIV];
+}
+
+- (void)setPageTitle:(NSString *)title
+{
+	if (headerLogoIV)
+		[headerLogoIV setHidden:YES];
+
+	[pageTitleLB setHidden:NO];
+	[pageTitleLB setText:title];
+}
+
+- (void)setBackButtonImage:(NSString *)imageName
+{
+	[backButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+}
+
+#pragma mark - action methods
+
 - (void)hideFooterAnimated:(BOOL)animated
 {
 	heightFooterInit = 0;
@@ -317,11 +332,6 @@
 	[spinner stopAnimating];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-	[self drawViewIn:toInterfaceOrientation withDuration:duration];
-}
-
 - (void)goBack
 {
 	[self goBackAnimated:YES];
@@ -333,12 +343,6 @@
 	{
 		[self.navigationController popViewControllerAnimated:animated];
 	}
-}
-
-- (void)didReceiveMemoryWarning
-{
-	[super didReceiveMemoryWarning];
-	// Dispose of any resources that can be recreated.
 }
 
 #pragma mark - keyboard methods

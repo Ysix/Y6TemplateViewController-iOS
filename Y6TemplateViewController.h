@@ -63,9 +63,12 @@
 @property (nonatomic, retain) UIScrollView *bodyView;
 @property (nonatomic, retain) UIView *footerView;
 
+// lifecycle
 - (id)initWithHeaderWithBackground:(UIImage *)image AndFooterHeight:(int)footerHeight;
 - (id)initWithHeaderHeight:(int)headerHeight andFooterHeight:(int)footerHeight;
+- (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration;
 
+// customising and setting views (must be used in load view)
 - (void)setStatusBarBackground:(UIImage *)image;
 - (void)setStatusBarBackgroundColor:(UIColor *)color;
 - (void)setHeaderBackground:(UIImage *)image;
@@ -73,19 +76,14 @@
 - (void)setPageTitle:(NSString *)title;
 - (void)setBackButtonImage:(NSString *)imageName;
 
-
-- (void)drawViewIn:(UIInterfaceOrientation)orientation withDuration:(NSTimeInterval)duration;
-
+// action methods
 - (void)hideFooterAnimated:(BOOL)animated;
-
 - (void)displayInfo:(NSString *)infos onView:(UIView *)superView;
 - (void)hideInfo;
-
 - (void)goBack;
 - (void)goBackAnimated:(BOOL)animated;
 
 // keyboard management
-
 - (void)keyboardWillShow:(NSNotification *)notification;
 - (void)keyboardDidShow:(NSNotification *)notification;
 - (void)keyboardWillHide:(NSNotification *)notification;
