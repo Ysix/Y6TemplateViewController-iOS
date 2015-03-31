@@ -8,23 +8,20 @@
 #define SIZE_OF_KEYBOARD_IPHONE SIZE_OF_KEYBOARD
 #define SIZE_OF_KEYBOARD (keyboardHeight) //  != -1 ? keyboardHeight : (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 162 : 216))
 
-#import "Defines.h"
+#if __has_include("Y6DimSideMenuViewController.h")
+#import "Y6DimSideMenuViewController.h"
+@interface Y6TemplateViewController : Y6DimSideMenuViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
+#else
 
-#ifdef NO_MENU
+#if __has_include("Y6SideMenuViewController.h")
+#import "Y6SideMenuViewController.h"
+@interface Y6TemplateViewController : Y6SideMenuViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
+#else
+
 #import <UIKit/UIKit.h>
 @interface Y6TemplateViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
 #endif
-
-#ifdef SIDE_MENU
-#import "Y6SideMenuViewController.h"
-@interface Y6TemplateViewController : Y6SideMenuViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
 #endif
-
-#ifdef DIM_SIDE_MENU
-#import "Y6DimSideMenuViewController.h"
-@interface Y6TemplateViewController : Y6DimSideMenuViewController <UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate>
-#endif
-
 {
     UIView *referenceView;
     
