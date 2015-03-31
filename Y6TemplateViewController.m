@@ -52,7 +52,7 @@
 
     if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
     {
-        referenceView = (UIView *)[self performSelector:@selector(maineView)];
+        referenceView = (UIView *)[self performSelector:@selector(mainView)];
     }
     else
     {
@@ -242,7 +242,7 @@
 
 		[pageTitleLB setFrame:CGRectMake(CGRectGetMaxX(backButton.frame) + 10, 0, headerView.frame.size.width - ((CGRectGetMaxX(backButton.frame) + 10) * 2), headerView.frame.size.height)];
     }
-    
+
 	if (heightFooterInit != -1)
 	{
 		footerView.frame = CGRectMake(0, mainFrame.size.height - heightFooterInit, mainFrame.size.width, heightFooterInit);
@@ -402,8 +402,8 @@
 
 - (void)sideMenuClicked
 {
-    if ([super respondsToSelector:@selector(sideMenuClicked)])
-	[super performSelector:@selector(sideMenuClicked)];
+	if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
+		[super sideMenuClicked];
 
 	if (textFieldFirstResponder)
 	{
