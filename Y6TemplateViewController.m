@@ -502,13 +502,13 @@
 	UIButton *btnValidTime;
 
 	btnCloseTimePicker = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[btnCloseTimePicker setFrame:CGRectMake(65, 220, 70, 26)];
+	[btnCloseTimePicker setFrame:CGRectMake((viewForPicker.frame.size.width - 70 * 2) / 3, 220, 70, 26)];
 	[btnCloseTimePicker setTitle:@"Fermer" forState:UIControlStateNormal];
 	[btnCloseTimePicker setTag:2];
 	[btnCloseTimePicker addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
 
 	btnValidTime = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	[btnValidTime setFrame:CGRectMake(185, 220, 70, 26)];
+	[btnValidTime setFrame:CGRectMake(CGRectGetMaxX(btnCloseTimePicker.frame) + btnCloseTimePicker.frame.origin.x, 220, 70, 26)];
 	[btnValidTime setTitle:@"Valider" forState:UIControlStateNormal];
 	[btnValidTime setTag:1];
 	[btnValidTime addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
