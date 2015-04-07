@@ -470,6 +470,8 @@
 
 #pragma mark UIPicker others functions
 
+// TO-DO : use block instead of selector for picker management
+
 - (void)initPicker
 {
 	if (textFieldFirstResponder)
