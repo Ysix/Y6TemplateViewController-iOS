@@ -402,9 +402,13 @@
 
 - (void)sideMenuClicked
 {
-	if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
-		[super sideMenuClicked];
-
+#ifdef SIDE_MENU_EXIST
+    if ([self isKindOfClass:[NSClassFromString(@"Y6SideMenuViewController") class]])
+    {
+        [super sideMenuClicked];
+    }
+#endif
+    
 	if (textFieldFirstResponder)
 	{
 		[self textFieldFirstResponderResign];
