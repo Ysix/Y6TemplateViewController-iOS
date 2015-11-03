@@ -519,9 +519,6 @@
 	[btnValidTime setTag:1];
 	[btnValidTime addTarget:self action:@selector(hidePicker:) forControlEvents:UIControlEventTouchDown];
 
-	[viewForPicker addSubview:btnCloseTimePicker];
-	[viewForPicker addSubview:btnValidTime];
-
 	if (isHourPicker)
 	{
 		if (datePicker == nil)
@@ -553,6 +550,9 @@
 		[pickerToDisplay selectRow:0 inComponent:0 animated:NO];
 	}
 	[self.view bringSubviewToFront:viewForPicker];
+    
+    [viewForPicker addSubview:btnCloseTimePicker];
+    [viewForPicker addSubview:btnValidTime];
 }
 
 - (void)reloadAndDisplayPicker
